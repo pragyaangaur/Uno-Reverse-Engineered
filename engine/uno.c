@@ -21,7 +21,7 @@
 #define NCARDS 108
 #define MAXP 16
 #define HISTMAX 4096
-#define HANDCAP 16384
+#define HANDCAP 65536
 enum { SKIP = 10, REV = 11, D2 = 12, WILD = 13, WD4 = 14 };
 
 static int ccol[NCARDS], crank[NCARDS];
@@ -72,7 +72,8 @@ typedef struct {
     int draw[NCARDS], nd;
     int disc[NCARDS], ndisc;
     int topc, topr, dir, cur;
-    long turns, plays, draws, reshuffles, passes;
+    long turns, plays, draws, reshuffles, passes, hoard_turn;
+    int top_held;   /* the player on turn holds a card of the current colour */
     int wd4_free, infinite, overflow;
     strat_t st[MAXP];
     rng_t rng;
@@ -109,7 +110,8 @@ static int has_colour(const game_t *g, int p, int col) {
 
 static int fits(const game_t *g, int p, int c) {
     if (crank[c] == WILD) return 1;
-    if (crank[c] == WD4) return g->wd4_free || !has_colour(g, p, g->topc);
+    (void)p;
+    if (crank[c] == WD4) return g->wd4_free || !g->top_held;
     return ccol[c] == g->topc || crank[c] == g->topr;
 }
 
@@ -177,7 +179,7 @@ static int run_game(game_t *g, long cap) {
     for (int i = 0; i < NCARDS; i++) g->draw[i] = i;
     shuffle(&g->rng, g->draw, NCARDS);
     g->nd = NCARDS; g->ndisc = 0;
-    g->turns = g->plays = g->draws = g->reshuffles = g->passes = 0;
+    g->turns = g->plays = g->draws = g->reshuffles = g->passes = g->hoard_turn = 0;
     for (int p = 0; p < n; p++) g->hs[p] = 0;
     g->overflow = 0;
     for (int r = 0; r < g->m; r++)
@@ -210,8 +212,14 @@ static int run_game(game_t *g, long cap) {
             for (int q = 0; q < n; q++) fprintf(g->trace, " %d", g->hs[q]);
             fputc('\n', g->trace);
         }
-        int k = 0;
-        for (int i = 0; i < g->hs[p]; i++) if (fits(g, p, g->hand[p][i])) idx[k++] = i;
+        /* A drawn card can only change this flag if it has the current colour, and then it fits anyway. */
+        g->top_held = has_colour(g, p, g->topc);
+        int k = 0, other = 0;
+        for (int i = 0; i < g->hs[p]; i++) {
+            if (fits(g, p, g->hand[p][i])) idx[k++] = i;
+            other += crank[g->hand[p][i]] != WD4;
+        }
+        if (!g->hoard_turn && g->hs[p] > 0 && other == 0) g->hoard_turn = g->turns;
         if (k == 0) {
             int d = draw_one(g, p);
             if (d >= 0 && fits(g, p, d)) { if (play(g, p, g->hs[p] - 1)) return p; }
@@ -259,7 +267,7 @@ int main(int argc, char **argv) {
 
     static long hist[HISTMAX + 1];
     long wins[MAXP] = {0}, unfinished = 0, minturns = 1L << 60, maxturns = 0;
-    double st = 0, st2 = 0, sp = 0, sd = 0, sr = 0;
+    double st = 0, st2 = 0, sp = 0, sd = 0, sr = 0, sh = 0;
     for (long gi = 0; gi < games; gi++) {
         int w = run_game(&g, cap);
         if (w < 0) { unfinished++; continue; }
@@ -267,6 +275,7 @@ int main(int argc, char **argv) {
         long t = g.turns;
         hist[t < HISTMAX ? t : HISTMAX]++;
         st += t; st2 += (double)t * t; sp += g.plays; sd += g.draws; sr += g.reshuffles;
+        sh += g.hoard_turn ? g.hoard_turn : t;
         if (t < minturns) minturns = t;
         if (t > maxturns) maxturns = t;
         if (infinite) continue;
@@ -279,10 +288,10 @@ int main(int argc, char **argv) {
     double mean = done ? st / done : 0;
     printf("{\"n\":%d,\"m\":%d,\"games\":%ld,\"seed\":%llu,\"spec\":\"%s\",\"wd4_free\":%d,"
            "\"infinite\":%d,\"unfinished\":%ld,\"mean_turns\":%.6f,\"var_turns\":%.6f,\"mean_plays\":%.6f,"
-           "\"mean_draws\":%.6f,\"mean_reshuffles\":%.6f,\"min_turns\":%ld,\"max_turns\":%ld,\"wins\":[",
+           "\"mean_draws\":%.6f,\"mean_reshuffles\":%.6f,\"mean_hoard_turn\":%.6f,\"min_turns\":%ld,\"max_turns\":%ld,\"wins\":[",
            n, m, games, (unsigned long long)seed, spec, wd4_free, infinite, unfinished, mean,
            done ? st2 / done - mean * mean : 0, done ? sp / done : 0, done ? sd / done : 0,
-           done ? sr / done : 0, minturns, maxturns);
+           done ? sr / done : 0, done ? sh / done : 0, minturns, maxturns);
     for (int p = 0; p < n; p++) printf("%s%ld", p ? "," : "", wins[p]);
     printf("],\"hist\":[");
     int last = HISTMAX;

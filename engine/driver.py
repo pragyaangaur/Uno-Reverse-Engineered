@@ -26,7 +26,7 @@ def merge(parts):
     tot = sum(done)
     d["games"] = sum(p["games"] for p in parts)
     d["unfinished"] = sum(p["unfinished"] for p in parts)
-    for k in ("mean_turns", "mean_plays", "mean_draws", "mean_reshuffles"):
+    for k in ("mean_turns", "mean_plays", "mean_draws", "mean_reshuffles", "mean_hoard_turn"):
         d[k] = sum(p[k] * w for p, w in zip(parts, done)) / tot
     second = sum((p["var_turns"] + p["mean_turns"] ** 2) * w for p, w in zip(parts, done)) / tot
     d["var_turns"] = second - d["mean_turns"] ** 2
