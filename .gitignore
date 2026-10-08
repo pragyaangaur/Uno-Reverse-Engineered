@@ -1,5 +1,6 @@
 engine/uno
 engine/shortest
+engine/endgame
 __pycache__/
 *.pyc
 .DS_Store
