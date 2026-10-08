@@ -32,6 +32,7 @@ def fig_fluid_limit():
     R = load("e2_infinite.json")
     B = load("e3_bigm.json") if os.path.exists(os.path.join(RES, "e3_bigm.json")) else []
     H = load("e3b_hugem.json") if os.path.exists(os.path.join(RES, "e3b_hugem.json")) else []
+    E6 = [r for f in ("e6_official.json", "e6b_odd.json", "e8_free.json") if os.path.exists(os.path.join(RES, f)) for r in load(f)]
     fig, ax = plt.subplots(figsize=(7, 4.5))
     for free, ls in ((False, "-"), (True, "--")):
         for n, col in zip((2, 3, 4, 6), ("C0", "C1", "C2", "C3")):
@@ -39,8 +40,8 @@ def fig_fluid_limit():
             for r in R:
                 if r["n"] == n and not free and r["m"] >= 5:
                     pts[r["m"]] = r["mean_turns"] / (n * r["m"])
-            for r in B + H:
-                if r["n"] == n and r["wd4_free"] == free:
+            for r in B + H + E6:
+                if r["n"] == n and bool(r["wd4_free"]) == free:
                     pts[r["m"]] = r["mean_turns"] / (n * r["m"])
             if not pts:
                 continue
@@ -52,8 +53,35 @@ def fig_fluid_limit():
     ax.axhline(26 / 23, color="grey", lw=0.6, ls=":"); ax.text(1500, 26 / 23 - 0.03, "26/23 (bulk only)", fontsize=8, color="grey")
     ax.set_xscale("log"); ax.set_xlabel("starting hand M (infinite deck)"); ax.set_ylabel("mean turns / (N M)")
     ax.set_ylim(1.0, 2.4); ax.legend(fontsize=7, ncol=2)
-    ax.set_title("Game length per card converges to exact rational limits")
+    ax.set_title("Game length per card for large hands")
     fig.tight_layout(); fig.savefig(os.path.join(FIG, "fluid_limit.png"), dpi=150)
+
+
+def fig_official_limit():
+    """T/(NM) under the official rule against 1/sqrt(M), with the limit the endgame runs predict at 1/sqrt(M) = 0."""
+    import sys
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    from fit_official import limits, points
+    lim = limits()
+    fig, ax = plt.subplots(figsize=(7, 4.5))
+    for n, col in zip((2, 3, 4, 5), ("C0", "C1", "C2", "C3")):
+        d = points(n)
+        if not len(d):
+            continue
+        M, T, s, _ = d.T
+        x = M ** -.5
+        ax.errorbar(x, T, yerr=s, fmt="o", ms=4, color=col, label=f"N={n}")
+        L = lim[n][0]
+        big = M >= 4000
+        a = np.sum((T[big] - L) * x[big] / s[big] ** 2) / np.sum(x[big] ** 2 / s[big] ** 2)
+        xs = np.linspace(0, x.max(), 50)
+        ax.plot(xs, L + a * xs, "--", color=col, lw=0.8)
+        ax.plot([0], [L], marker="*", ms=11, color=col, mec="k", mew=0.5)
+    ax.text(0.0004, 53 / 46 - 0.004, "53/46", fontsize=8)
+    ax.set_xlabel("1 / sqrt(M)"); ax.set_ylabel("mean turns / (N M), official rule")
+    ax.set_xlim(left=-0.0008); ax.legend(fontsize=8)
+    ax.set_title("Official rule against the limits from the endgame runs (stars)")
+    fig.tight_layout(); fig.savefig(os.path.join(FIG, "official_limit.png"), dpi=150)
 
 
 def fig_tail():
@@ -101,5 +129,5 @@ def fig_tournament():
 
 
 if __name__ == "__main__":
-    fig_length_grid(); fig_fluid_limit(); fig_tail(); fig_shortest(); fig_tournament()
+    fig_length_grid(); fig_fluid_limit(); fig_official_limit(); fig_tail(); fig_shortest(); fig_tournament()
     print("figures written to", FIG)
