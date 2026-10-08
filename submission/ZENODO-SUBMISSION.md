@@ -1,5 +1,7 @@
 # Zenodo record
 
+Published on 8 October 2026 as https://doi.org/10.5281/zenodo.23232696 (concept DOI) and 10.5281/zenodo.23232697 (version 1.0.0). The MD5 checksums of both uploaded files match the local builds.
+
 Do this before the arXiv submission, because the arXiv comments field should carry the DOI that Zenodo gives you. Create one new record at https://zenodo.org/uploads/new that holds both the paper and the code.
 
 ## Files to upload
@@ -87,6 +89,6 @@ English.
 
 ## After publishing
 
-1. Copy the DOI Zenodo shows, which looks like `10.5281/zenodo.NNNNNNNN`. It goes in the arXiv comments field.
+1. Copy the DOI into the arXiv comments field. This is done in `ARXIV-SUBMISSION.md`.
 2. When arXiv announces the paper, edit this record and add one more related work: relation "is identical to", identifier `arXiv:YYMM.NNNNN`, resource type Preprint. Zenodo lets you edit metadata after publishing without a new version.
-3. Add the DOI badge to `README.md` and note the DOI in `AGENTS.md`.
+3. Add the DOI badge to `README.md` and note the DOI in `AGENTS.md`. Both are done.

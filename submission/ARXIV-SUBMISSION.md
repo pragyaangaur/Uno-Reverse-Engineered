@@ -1,6 +1,6 @@
 # arXiv submission
 
-Start it at https://arxiv.org/submit after the Zenodo record is published. You are endorsed for math.CO, so the primary category is open to you.
+Start it at https://arxiv.org/submit. The Zenodo record is published at https://doi.org/10.5281/zenodo.23232696. You are endorsed for math.CO, so the primary category is open to you.
 
 ## File to upload
 
@@ -45,10 +45,10 @@ Paste the contents of `submission/abstract.txt`. It is 1449 characters, under th
 **Comments**
 
 ```
-8 pages, 3 figures, 4 tables. Code and data: https://doi.org/10.5281/zenodo.NNNNNNNN
+8 pages, 3 figures, 4 tables. Code and data: https://doi.org/10.5281/zenodo.23232696
 ```
 
-Replace `NNNNNNNN` with the number from the Zenodo record. If you submit before the Zenodo record exists, use `Code and data: https://github.com/pragyaangaur/Uno-Reverse-Engineered` instead.
+This is the concept DOI of the Zenodo record, which always resolves to the newest version. The DOI of version 1.0.0 itself is 10.5281/zenodo.23232697.
 
 **MSC class**
 
