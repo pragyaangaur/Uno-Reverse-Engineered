@@ -70,7 +70,18 @@ The hoard decides the endgame. Once a player is down to Draw Fours they have no 
 
 With an even number of players the endgame follows a fixed pattern. Seat 0 dumps on seat 1. Seat 2 holds no card of the named colour, so it dumps on seat 3, and this goes on round the table. The even seats dump and the odd seats only collect. Every even seat has h cards to dump, so the endgame takes (N/2)h turns and E = N/2. The runs give exactly this for N = 2, 4, 6 and 8, and so T/(NM) = 26/23 + 1/46 = 53/46 for every even N. Each collecting seat ends with its own h Draw Fours and 4h new cards, so a loser holds on average 5N/(46(N − 1)) of M at the end. This is 5/23 = 0.217 for two players and 10/69 = 0.145 for four.
 
-With an odd number of players the dumping seats cannot alternate all the way round the table. The runs settle into (N − 1)/2 dumping seats, each with one collecting seat after it, and one place where two seats that do not dump sit next to each other. The second seat of that pair plays an ordinary card in every round, and its Draw Twos, Skips and Reverses break the pattern from time to time. A clean pattern would need (N + 1)/2 turns per dumped card. The measured E is larger by 0.97 for three players, 1.05 for five, 0.82 for seven and 0.74 for nine. I have not found a closed form for these constants, and they do not look like simple fractions.
+With an odd number of players the dumping seats cannot alternate all the way round the table. The runs settle into (N − 1)/2 dumping seats, each with one collecting seat after it, and one place where two seats that do not dump sit next to each other. A clean pattern would need (N + 1)/2 turns per dumped card, and the measured E is larger by 0.97 for three players, 1.05 for five, 0.82 for seven and 0.74 for nine. Traces of single endgames in which every seat starts with 20,000 Draw Fours show this pattern directly. With three players one seat dumps and the other two only collect. With five players two seats dump, and the two collecting seats next to each other are the pair. With seven and nine players the dumpers do not spend at the same rate. The dumper furthest from the neighbouring pair runs out first, and in a seven-player game it spent 20,043 Draw Fours while the other two spent about 18,700 each. So E is the number of turns per Draw Four of the fastest dumper.
+
+**The odd-N endgame from the pattern alone.** `theory/reduced_endgame.py` keeps only this pattern. The dumpers sit at seats 1, 3, ..., N − 2 with endless hoards and small hands. Every other seat holds a hand so large that it always has the current colour, so it never plays a Draw Four, and every seat plays a uniformly random legal card. When the large hands are given the deck's proportions the model gives E = 2.928, 3.989, 4.769 and 5.702 for N = 3, 5, 7 and 9, which is 1.0% to 1.6% below the exact endgame. The gap comes from the make-up of the large hands. They take in random cards and play out the cards that fit, so their make-up drifts away from the deck's proportions. When the large hands are real hands that receive and play their cards (`--real`), the model gives the following.
+
+| Players | Pattern, deck-like large hands | Pattern, real large hands | Exact endgame (`endgame.c`) |
+| --- | --- | --- | --- |
+| 3 | 2.928 | 2.973 | 2.9717 ± 0.0003 |
+| 5 | 3.989 | 4.055 | 4.0550 ± 0.0003 |
+| 7 | 4.769 | 4.817 | 4.8164 ± 0.0004 |
+| 9 | 5.702 | 5.744 | 5.7399 ± 0.0003 |
+
+Each model value is the mean of four runs of 600,000 turns, and the four runs spread by about 0.005. So the odd-N endgame is fully explained by the seating pattern, and E is the turn rate of one fixed Markov process. That process still has the large hands' changing make-up inside it, so the constants are computed and have no closed form. They give T/(NM) = 26/23 + E/(23N), which is 1.1735 for three players, 1.1657 for five, 1.1604 for seven and 1.1582 for nine.
 
 | Players | E, endgame turns per hoarded card | Hoard h in the run | Predicted T/(NM) | Predicted leftover per loser, share of M |
 | --- | --- | --- | --- | --- |
@@ -121,7 +132,7 @@ The strategy family has five settings: whether to hold wilds back while a colour
 
 ## Limitations
 
-The simulated players always play when they can, so the length results describe forced play. The strategy family is small and hand built, and a learned policy could do better. The large-hand law is proved for the fluid limit and checked by simulation. The official limits rest on the fluid main phase plus the endgame runs. For even N the full games agree with 53/46 under a one-power-law fit, and for odd N the endgame constants are measured, not derived, and the full games have not yet reached them. The finite-size corrections are fitted and not derived. The infinite deck is an idealisation, and on the real deck M cannot pass 107/N. The shortest-game solver assumes full information and full cooperation, so it measures what a deal allows, not what happens at a table.
+The simulated players always play when they can, so the length results describe forced play. The strategy family is small and hand built, and a learned policy could do better. The large-hand law is proved for the fluid limit and checked by simulation. The official limits rest on the fluid main phase plus the endgame runs. For even N the full games agree with 53/46 under a one-power-law fit, and for odd N the endgame constants are reproduced by a reduced model of the seating pattern but have no closed form, and the full games have not yet reached them. The finite-size corrections are fitted and not derived. The infinite deck is an idealisation, and on the real deck M cannot pass 107/N. The shortest-game solver assumes full information and full cooperation, so it measures what a deal allows, not what happens at a table.
 
 ## Reproduce
 
@@ -135,6 +146,8 @@ python3 e4_tournament.py 20000 5000 > ../results/e4_tournament.txt
 python3 e5_shortest.py > ../results/e5_shortest.txt
 python3 e6_official.py > ../results/e6_official.txt
 python3 e6b_odd.py > ../results/e6b_odd.txt
+cd .. && python3 theory/reduced_endgame.py > results/e9_reduced_endgame.txt
+python3 theory/reduced_endgame.py --real > results/e9_reduced_endgame_real.txt && cd engine
 cc -O3 -o endgame endgame.c -lm && python3 e7_endgame.py > ../results/e7_endgame.txt
 python3 e8_free.py > ../results/e8_free.txt
 python3 check_shortest.py
