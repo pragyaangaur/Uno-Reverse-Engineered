@@ -1,0 +1,28 @@
+two players, 80000 games per pair
+Nash mixture (value should be 0 for a symmetric game): -0.0
+  1.000  1,1,1,2,0  hold wilds, dump actions, best colour, attack at 2, no steer
+best against uniform random play:
+  0.6279  1,1,1,2,0  hold wilds, dump actions, best colour, attack at 2, no steer
+  0.6251  1,1,1,0,0  hold wilds, dump actions, best colour, no attack, no steer
+  0.6182  1,0,1,2,0  hold wilds, actions neutral, best colour, attack at 2, no steer
+  0.6177  1,1,1,2,3  hold wilds, dump actions, best colour, attack at 2, steer colour
+  0.6167  1,1,1,0,3  hold wilds, dump actions, best colour, no attack, steer colour
+worst against uniform random play:
+  0.4791  0,-1,0,0,0  wilds any time, save actions, random colour, no attack, no steer
+  0.4761  0,0,0,0,3  wilds any time, actions neutral, random colour, no attack, steer colour
+  0.4627  0,-1,0,0,3  wilds any time, save actions, random colour, no attack, steer colour
+
+four players, 20000 games per deviant and field
+fields where no deviant wins much more than 1/4 (stable):
+  field 1,0,1,2,3 (hold wilds, actions neutral, best colour, attack at 2, steer colour): best deviant 1,0,1,2,3 wins 0.2504
+  field 1,0,1,0,3 (hold wilds, actions neutral, best colour, no attack, steer colour): best deviant 1,1,1,2,3 wins 0.2521
+  field 1,-1,1,2,3 (hold wilds, save actions, best colour, attack at 2, steer colour): best deviant 1,0,1,2,3 wins 0.2537
+  field 1,-1,1,2,0 (hold wilds, save actions, best colour, attack at 2, no steer): best deviant 1,1,1,0,3 wins 0.2572
+  field 1,1,1,2,3 (hold wilds, dump actions, best colour, attack at 2, steer colour): best deviant 1,0,1,2,3 wins 0.2582
+best response path from random play: 0,0,0,0,0 -> 1,0,1,2,3 -> 1,0,1,2,3
+deviant against a random field, top 5:
+  0.3276  1,0,1,2,3  hold wilds, actions neutral, best colour, attack at 2, steer colour
+  0.3249  1,-1,1,2,3  hold wilds, save actions, best colour, attack at 2, steer colour
+  0.3192  1,0,1,2,0  hold wilds, actions neutral, best colour, attack at 2, no steer
+  0.3190  1,-1,1,0,3  hold wilds, save actions, best colour, no attack, steer colour
+  0.3186  1,1,1,0,3  hold wilds, dump actions, best colour, no attack, steer colour
