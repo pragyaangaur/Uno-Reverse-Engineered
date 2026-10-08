@@ -10,6 +10,7 @@ sys.path.insert(0, os.path.join(ROOT, "theory"))
 import fluid  # noqa: E402
 
 UNO = os.path.join(ROOT, "engine", "uno")
+ENDGAME = os.path.join(ROOT, "engine", "endgame")
 
 
 def run(*args):
@@ -48,6 +49,19 @@ def test_seat_zero_has_the_edge_with_four_players():
     r = run("-n", 4, "-m", 7, "-g", 400000, "-s", 3)
     w = r["wins"]
     assert w[0] > w[3], w
+
+
+def test_even_endgame_gives_53_over_46():
+    # with an even number of seats the dumpers sit two apart and dump h each, so the endgame lasts (N/2) h turns
+    for n in (2, 4, 6):
+        r = json.loads(subprocess.run([ENDGAME, "-n", str(n), "-h", "20000", "-g", "20", "-s", "1"], capture_output=True, text=True, check=True).stdout)
+        assert abs(r["turns_per_h"] - n / 2) < 1e-3, r
+        assert abs(26 / 23 + r["turns_per_h"] / (23 * n) - 53 / 46) < 1e-4
+
+
+def test_odd_endgame_is_not_the_even_one():
+    r = json.loads(subprocess.run([ENDGAME, "-n", "3", "-h", "10000", "-g", "400", "-s", "1"], capture_output=True, text=True, check=True).stdout)
+    assert 2.95 < r["turns_per_h"] < 3.03, r
 
 
 if __name__ == "__main__":
