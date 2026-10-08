@@ -1,0 +1,2 @@
+3 32000 160 T/(NM)=1.16985±0.00028 left/loser/M=0.0999 hoard_start/(NM)=1.12706 endgame/(M/23)=2.953
+5 32000 100 T/(NM)=1.16032±0.00033 left/loser/M=0.1029 hoard_start/(NM)=1.12460 endgame/(M/23)=4.108
