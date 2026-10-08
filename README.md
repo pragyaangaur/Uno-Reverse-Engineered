@@ -33,6 +33,10 @@ engine/shortest -n 3 -m 7 -g 20 -s 1     # fastest possible game per deal
 engine/endgame -n 3 -h 100000 -g 50      # the Draw Four endgame on its own
 ```
 
+## Paper
+
+The paper is `paper/uno.tex`, with a built copy in `paper/uno.pdf`. Version 1.0.0 of this repository is the version it cites. `submission/` holds the filing notes for Zenodo and arXiv.
+
 ## Licence
 
 MIT
