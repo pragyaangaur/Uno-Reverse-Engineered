@@ -58,17 +58,56 @@ R = 2 · (8/108)(NM + R) + 4 · (4/108)(NM + R) = (8/27)(NM + R).
 
 So R = 8NM/19 and the number of turns is NM + R = (27/19) NM. The constant depends on the deck alone. It holds for every N and for every strategy that plays the hand down evenly.
 
-**The test.** With the Draw Four made legal at any time, so that the assumption holds, the mean of T/(NM) at M = 1000 is 1.4213 ± 0.0008 for two players, against 27/19 = 1.4211. Three, four and six players approach the same value from below, and they sit at 1.409, 1.396 and 1.380 at M = 1000. The gap shrinks as the losers' leftover cards shrink relative to M. A strategy that names its best colour or dumps its action cards first gives 1.41 to 1.43 at M = 1000 as well.
+**The test.** With the Draw Four made legal at any time, so that the assumption holds, the mean of T/(NM) at M = 1000 is 1.4213 ± 0.0008 for two players, against 27/19 = 1.4211. Larger hands show that this close match is partly luck. `engine/e8_free.py` runs M = 500, 1000, 2000, 4000, 8000 and 16000. For two players T/(NM) is 1.4403, 1.4225, 1.4144, 1.4130, 1.4138 and 1.4164, so it falls below 27/19 and then turns up again near M = 4000. For four players it is 1.3946, 1.3947, 1.3977, 1.4024, 1.4062 and 1.4110, and it rises the whole way. The standard errors are below 0.0018.
+
+Three corrections account for this shape. The first is negative. The cards the losers still hold at the end are never played, and the leftover per loser falls as 0.042, 0.033, 0.026, 0.021, 0.016 and 0.011 of M for two players. Its local slope on a log-log plot steepens from about −0.35 to about −0.47 over this range, so the earlier estimate of M^(−0.37) was too shallow, and the slope may be heading to −1/2. The second is positive. Every game has about 14 turns in which a player draws and cannot play, for every M and for both N, and these add 14/(NM). The third is positive and smaller. Even after the leftover cards are counted as if they had been played, the count comes out above 27/19 by 0.0029 for two players and 0.0025 for four at M = 16000, and this excess shrinks as M grows. The leftover share goes to zero, so the counting argument still gives 27/19 as the limit. The runs agree with it to about 0.005 at M = 16000, and the agreement at M = 1000 should not be read as a four-digit confirmation. Three and six players sit at 1.409 and 1.380 at M = 1000. A strategy that names its best colour or dumps its action cards first gives 1.41 to 1.43 at M = 1000 as well.
 
 **What the official rule does.** Under the official rule a large hand always holds a card of the current colour, so a Draw Four can never be played and every one a player receives stays in the hand. The same counting with Draw Fours left out gives R = (4/27)(M + R) per player. So each player plays 26M/23 cards in the main phase of the game and ends it holding a hoard of M/23 Draw Fours. The fluid equations in `theory/fluid.py` give exactly these values, and a traced two-player game with M = 1000 shows the winner reaching 41 cards, nearly all Draw Fours, against the predicted 43.
 
 The hoard decides the endgame. Once a player is down to Draw Fours they have no card of the current colour, so each Draw Four is legal, and it makes the next player draw four and miss their turn. With two players the hoarder plays every Draw Four in a row. With an even number of players the players two seats apart take turns dumping, and the players between them are skipped every time and only collect cards. Adding M/23 dumping turns for every two players gives a predicted limit of T/(NM) = 26/23 + 1/46 = 53/46 ≈ 1.152 for every even N.
 
-The simulation agrees with the mechanism and approaches the number slowly. At the end of a two-player game the loser holds 0.235M cards at M = 4000, close to the predicted 5M/23 = 0.217M. With the Draw Four always legal the loser holds 0.020M at M = 4000, and that share keeps falling toward zero, roughly like M^(−0.37) over the range run. The official T/(NM) is 1.129, 1.131, 1.136 and 1.141 at M = 640, 1000, 2000 and 4000 for two players and 1.138, 1.136, 1.139 and 1.142 for four. Both are still rising toward 53/46 at the largest M that was run, so the official limit is a prediction that the data supports and does not yet confirm. Odd N has a different endgame, because the skipped player comes around to the dumper's turn, and its limit is open. The measured value for three players is 1.182 at M = 1000.
+**The endgame on its own.** A full game at M = 32000 takes several seconds, so the endgame was also played by itself. `engine/endgame.c` gives every seat h Draw Fours and nothing else, turns up a random coloured card and plays to the end with the same rules and the same random strategy. It stores a hand as a count for each of the 108 cards, so a turn costs the same for any hand and h can reach a million. If the endgame lasts E·h turns, then with h = M/23 the official limit is T/(NM) = 26/23 + E/(23N).
+
+With an even number of players the endgame follows a fixed pattern. Seat 0 dumps on seat 1. Seat 2 holds no card of the named colour, so it dumps on seat 3, and this goes on round the table. The even seats dump and the odd seats only collect. Every even seat has h cards to dump, so the endgame takes (N/2)h turns and E = N/2. The runs give exactly this for N = 2, 4, 6 and 8, and so T/(NM) = 26/23 + 1/46 = 53/46 for every even N. Each collecting seat ends with its own h Draw Fours and 4h new cards, so a loser holds on average 5N/(46(N − 1)) of M at the end. This is 5/23 = 0.217 for two players and 10/69 = 0.145 for four.
+
+With an odd number of players the dumping seats cannot alternate all the way round the table. The runs settle into (N − 1)/2 dumping seats, each with one collecting seat after it, and one place where two seats that do not dump sit next to each other. The second seat of that pair plays an ordinary card in every round, and its Draw Twos, Skips and Reverses break the pattern from time to time. A clean pattern would need (N + 1)/2 turns per dumped card. The measured E is larger by 0.97 for three players, 1.05 for five, 0.82 for seven and 0.74 for nine. I have not found a closed form for these constants, and they do not look like simple fractions.
+
+| Players | E, endgame turns per hoarded card | Hoard h in the run | Predicted T/(NM) | Predicted leftover per loser, share of M |
+| --- | --- | --- | --- | --- |
+| 2 | 1 | 10^6 | 53/46 = 1.15217 | 5/23 = 0.2174 |
+| 3 | 2.9717 ± 0.0003 | 10^6 | 1.17350 | 0.0949 |
+| 4 | 2 | 10^6 | 53/46 = 1.15217 | 10/69 = 0.1449 |
+| 5 | 4.0550 ± 0.0003 | 10^6 | 1.16570 | 0.1012 |
+| 6 | 3 | 10^6 | 53/46 = 1.15217 | 0.1304 |
+| 7 | 4.8164 ± 0.0004 | 10^5 | 1.16035 | 0.1015 |
+| 8 | 4 | 10^5 | 53/46 = 1.15217 | 0.1242 |
+| 9 | 5.7399 ± 0.0003 | 10^5 | 1.15816 | 0.1028 |
+
+For three players E is 3.197, 2.993, 2.973 and 2.972 at h = 10^3, 10^4, 10^5 and 10^6, so the value has settled. Starting every seat with k = 10 or 300 random cards beside the Draw Fours changes E by about 3k/h, which goes to zero as h grows. These runs are in `results/e7_endgame.txt`.
+
+**Full games up to M = 32000.** `engine/e6_official.py` and `engine/e6b_odd.py` play full games under the official rule with the infinite deck. Each point has between 100 and 800 games, and the standard errors are 0.0002 to 0.0016.
+
+| M | N = 2 | N = 3 | N = 4 | N = 5 |
+| --- | --- | --- | --- | --- |
+| 1000 | 1.1306 | 1.1805 | 1.1350 | 1.1438 |
+| 2000 | 1.1362 | 1.1728 | 1.1390 | 1.1489 |
+| 4000 | 1.1410 | 1.1687 | 1.1433 | 1.1523 |
+| 8000 | 1.1441 | 1.1684 | 1.1455 | 1.1555 |
+| 16000 | 1.1465 | 1.1692 | 1.1477 | 1.1582 |
+| 32000 | 1.1482 | 1.1699 | 1.1489 | 1.1603 |
+| predicted limit | 1.1522 | 1.1735 | 1.1522 | 1.1657 |
+
+For even N the data now agree with 53/46. A fit of T/(NM) = L + a·M^(−p) with all three numbers free gives L = 1.1527 ± 0.0015 and p = 0.46 ± 0.07 for two players, and L = 1.1527 ± 0.0014 and p = 0.45 ± 0.08 for four. With p fixed at 1/2 the fit gives L = 1.15192 ± 0.00034 for two players and 1.15201 ± 0.00029 for four, which are 0.7 and 0.6 standard errors from 53/46 = 1.15217, with chi-square 0.7 and 2.8 on 4 degrees of freedom. The gap to 53/46 shrinks by a factor close to √2 every time M doubles. The two-player loser holds 0.251, 0.244, 0.235, 0.231, 0.228 and 0.224 of M from M = 1000 to 32000, and this also moves toward 5/23 = 0.217 at roughly the same rate. These fits assume one power-law correction, so they confirm the limit only within that assumption. The script is `analysis/fit_official.py`.
+
+The likely source of the M^(−1/2) correction is the main phase. Hands do not run out of coloured cards at the same moment, because the fluctuations in a hand of size M are of order √M. A hand that is nearly out of coloured cards often lacks the current colour and plays a Draw Four early, and the other hands still hold some coloured cards when the first hand becomes a pure hoard. Each of these effects changes the game by a number of turns of order √M, which is of order M^(−1/2) after division by NM. This explanation is a heuristic and has not been derived.
+
+For odd N the data are consistent with the endgame prediction, but they do not confirm it. Five players rise steadily, and the free fit gives L = 1.1708 ± 0.0040 against the predicted 1.1657, but the approach is slower than M^(−1/2) over this range and a fit with p fixed at 1/2 is poor. Three players are not monotone. T/(NM) falls to 1.1684 at M = 8000 and then rises, and at M = 32000 it is still 0.0036 below the prediction. The three-player leftover share gives better support, because it falls steadily as 0.117, 0.113, 0.108, 0.105, 0.102 and 0.100 toward the predicted 0.095. The endgame seen inside full games also matches. Counted from the first turn at which some player holds only Draw Fours, it lasts 2.95·M/23 turns for three players at M = 32000, against E = 2.97 from the endgame runs, and 4.11·M/23 turns for five against E = 4.06. The remaining gap for odd N is mostly in the main phase, where the even case shows the same slow approach.
 
 A strategy that holds back a class of cards builds a hoard of the same kind. A strategy that holds wilds and saves action cards gives T/(NM) = 0.87 at M = 1000 with the Draw Four free, which is even shorter than the official rule. So the law describes play that keeps the hand balanced, and the Draw Four rule is the one place where the official rules force a hoard on everybody.
 
 ![Fluid limit](figures/fluid_limit.png)
+
+![Official limit](figures/official_limit.png)
 
 ## 5. Game theory
 
@@ -82,7 +121,7 @@ The strategy family has five settings: whether to hold wilds back while a colour
 
 ## Limitations
 
-The simulated players always play when they can, so the length results describe forced play. The strategy family is small and hand built, and a learned policy could do better. The large-hand law is proved for the fluid limit and checked by simulation. The finite-size corrections are not derived, and the even-N official limit of 53/46 has not been reached by any run. The infinite deck is an idealisation, and on the real deck M cannot pass 107/N. The shortest-game solver assumes full information and full cooperation, so it measures what a deal allows, not what happens at a table.
+The simulated players always play when they can, so the length results describe forced play. The strategy family is small and hand built, and a learned policy could do better. The large-hand law is proved for the fluid limit and checked by simulation. The official limits rest on the fluid main phase plus the endgame runs. For even N the full games agree with 53/46 under a one-power-law fit, and for odd N the endgame constants are measured, not derived, and the full games have not yet reached them. The finite-size corrections are fitted and not derived. The infinite deck is an idealisation, and on the real deck M cannot pass 107/N. The shortest-game solver assumes full information and full cooperation, so it measures what a deal allows, not what happens at a table.
 
 ## Reproduce
 
@@ -94,6 +133,10 @@ python3 e3_bigm.py > ../results/e3_bigm.txt
 python3 e3b_hugem.py > ../results/e3b_hugem.txt
 python3 e4_tournament.py 20000 5000 > ../results/e4_tournament.txt
 python3 e5_shortest.py > ../results/e5_shortest.txt
+python3 e6_official.py > ../results/e6_official.txt
+python3 e6b_odd.py > ../results/e6b_odd.txt
+cc -O3 -o endgame endgame.c -lm && python3 e7_endgame.py > ../results/e7_endgame.txt
+python3 e8_free.py > ../results/e8_free.txt
 python3 check_shortest.py
-cd .. && python3 theory/fluid.py && python3 analysis/figures.py
+cd .. && python3 theory/fluid.py && python3 analysis/fit_official.py && python3 analysis/figures.py
 ```
