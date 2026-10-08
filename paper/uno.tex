@@ -1,4 +1,4 @@
-\documentclass[11pt]{article}
+\documentclass[11pt]{amsart}
 \usepackage[margin=1in]{geometry}
 \usepackage{amsmath,amssymb,amsthm}
 \usepackage{booktabs}
@@ -14,16 +14,19 @@
 
 \graphicspath{{../figures/}}
 
-\title{How long is a game of Uno?\\[2pt] \large A counting law for large hands and the Wild Draw Four hoard}
-\author{Pragyaan Gaur\\ \small\texttt{pragyaangaur12@gmail.com}}
-\date{October 2026}
+\title[How long is a game of Uno?]{How long is a game of Uno? A counting law for large hands and the Wild Draw Four hoard}
+\author{Pragyaan Gaur}
+\email{pragyaangaur12@gmail.com}
+\date{8 October 2026}
+\subjclass[2020]{00A08, 60C05, 91A46, 60J10}
+\keywords{Uno, card games, game length, conservation law, fluid limit, Markov chain, Nash equilibrium}
 
 \begin{document}
-\maketitle
-
 \begin{abstract}
 We study the length of one round of Uno under the official rules, for $N$ players who each start with $M$ cards. The fastest possible round takes at least $M$ turns with two players and at least $2M-1$ turns with three or more, and both bounds are attained for small $M$. An exact search over random deals shows that real deals rarely allow them. Under the official rules a round has no maximum length. Under forced play the probability that a round lasts more than $t$ turns decays exponentially in $t$ at a rate that does not depend on $M$. Our main result concerns very large hands. If every card a player ever holds is eventually played, a round lasts $\frac{27}{19}NM$ turns to first order, and the constant depends only on the composition of the deck. The official rule that a Wild Draw Four may only be played by a player who holds no card of the current colour breaks this law. Every large hand hoards Wild Draw Fours, $M/23$ of them per player, and the round ends with a dumping endgame. For an even number of players this gives $\frac{53}{46}NM$ turns. For an odd number of players the dumping cannot alternate round the table, and the endgame settles into a seating pattern whose turn rate we compute numerically. Simulations with up to $32{,}000$ cards per hand support these limits. Finally we solve a small strategy game: with two players the Nash equilibrium over a family of 48 strategies is a single pure strategy that wins 62.8\% of rounds against uniformly random play.
 \end{abstract}
+
+\maketitle
 
 \section{Introduction}
 
@@ -230,6 +233,12 @@ The counting law shows that a large-hand Uno round behaves like a conservation p
 
 Several questions remain. The finite-size corrections, which look like $M^{-1/2}$, are fitted and not derived. The odd-$N$ endgame constants are computed and have no closed form. On the real 108-card deck $M$ cannot exceed $107/N$, so the large-hand results describe an idealised deck. The simulated players never draw voluntarily, and the strategy family is small and hand-built.
 
+\section*{Code and data}
+The C engine, the exact solver, the endgame simulator, the experiment scripts, their raw output and the scripts that draw the figures are available at \url{https://github.com/pragyaangaur/Uno-Reverse-Engineered}, version 1.0.0, under the MIT licence. Every number in this paper can be regenerated from that repository on a laptop.
+
+\section*{Acknowledgements}
+A large language model helped with the wording and the organization of this paper and with writing the simulation code. The author directed the work and checked all mathematical results, proofs, computations and code, and the author is responsible for all the content of this paper.
+
 \begin{thebibliography}{9}
 \bibitem{demaine2014}
 E.~D. Demaine, M.~L. Demaine, R.~Uehara, T.~Uno and Y.~Uno.
@@ -239,7 +248,7 @@ doi:10.1016/j.tcs.2013.11.023.
 
 \bibitem{repo}
 P.~Gaur.
-Uno Reverse Engineered: code and data for this paper.
+Uno Reverse Engineered: code and data for this paper, version 1.0.0.
 \url{https://github.com/pragyaangaur/Uno-Reverse-Engineered}, 2026.
 \end{thebibliography}
 
