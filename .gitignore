@@ -1,0 +1,5 @@
+engine/uno
+engine/shortest
+__pycache__/
+*.pyc
+.DS_Store
