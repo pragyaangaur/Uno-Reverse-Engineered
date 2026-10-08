@@ -4,3 +4,8 @@ engine/endgame
 __pycache__/
 *.pyc
 .DS_Store
+paper/*.aux
+paper/*.log
+paper/*.out
+paper/*.fls
+paper/*.fdb_latexmk
