@@ -1,0 +1,9 @@
+official 2 2000 2000 T/(NM)=1.1361±0.0004 plays/(NM)=1.1361 left/loser/M=0.2434
+official 2 4000 600 T/(NM)=1.1413±0.0005 plays/(NM)=1.1413 left/loser/M=0.2350
+official 4 2000 600 T/(NM)=1.1387±0.0005 plays/(NM)=1.1387 left/loser/M=0.1387
+official 4 4000 200 T/(NM)=1.1422±0.0006 plays/(NM)=1.1422 left/loser/M=0.1396
+free 2 2000 2000 T/(NM)=1.4149±0.0007 plays/(NM)=1.4116 left/loser/M=0.0270
+free 2 4000 600 T/(NM)=1.4132±0.0009 plays/(NM)=1.4115 left/loser/M=0.0201
+free 4 2000 600 T/(NM)=1.3958±0.0011 plays/(NM)=1.3941 left/loser/M=0.0324
+free 4 4000 200 T/(NM)=1.4022±0.0014 plays/(NM)=1.4012 left/loser/M=0.0230
+python3 e3b_hugem.py  461.73s user 2.27s system 919% cpu 50.452 total
