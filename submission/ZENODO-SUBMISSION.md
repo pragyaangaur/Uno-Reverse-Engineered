@@ -90,5 +90,5 @@ English.
 ## After publishing
 
 1. Copy the DOI into the arXiv comments field. This is done in `ARXIV-SUBMISSION.md`.
-2. When arXiv announces the paper, edit this record and add one more related work: relation "is identical to", identifier `arXiv:YYMM.NNNNN`, resource type Preprint. Zenodo lets you edit metadata after publishing without a new version.
+2. When arXiv announces the paper, edit this record and add one more related work: relation "is identical to", identifier `arXiv:2610.14076`, resource type Preprint. Zenodo lets you edit metadata after publishing without a new version. The arXiv ID is known as of 14 October 2026, and this edit is the author's to make.
 3. Add the DOI badge to `README.md` and note the DOI in `AGENTS.md`. Both are done.

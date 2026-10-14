@@ -1,5 +1,7 @@
 # arXiv submission
 
+Filed by the author and announced as https://arxiv.org/abs/2610.14076, submitted on 8 October 2026. arXiv lists it under math.GM (General Mathematics), so the math.CO primary and the math.PR cross-list asked for below were not kept. The title and the comments line with the Zenodo DOI appear as submitted. The rest of this file is the plan as it was prepared.
+
 Start it at https://arxiv.org/submit. The Zenodo record is published at https://doi.org/10.5281/zenodo.23232696. You are endorsed for math.CO, so the primary category is open to you.
 
 ## File to upload

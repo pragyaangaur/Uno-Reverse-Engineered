@@ -1,5 +1,6 @@
 # Uno Reverse Engineered
 
+[![arXiv](https://img.shields.io/badge/arXiv-2610.14076-b31b1b.svg)](https://arxiv.org/abs/2610.14076)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.23232696.svg)](https://doi.org/10.5281/zenodo.23232696)
 
 How short can a game of Uno be, how long can it last, and how should you play it? This repo answers those questions for N players with M cards each, using a fast C engine for the official rules, an exact solver for the shortest game, and a small piece of new maths about very large hands.
@@ -37,7 +38,21 @@ engine/endgame -n 3 -h 100000 -g 50      # the Draw Four endgame on its own
 
 ## Paper
 
-The paper is `paper/uno.tex`, with a built copy in `paper/uno.pdf`. Version 1.0.0 of this repository is the version it cites, and the paper and that version are archived together on Zenodo at https://doi.org/10.5281/zenodo.23232696. `submission/` holds the filing notes for Zenodo and arXiv.
+The paper is on arXiv as [arXiv:2610.14076](https://arxiv.org/abs/2610.14076). The source is `paper/uno.tex`, with a built copy in `paper/uno.pdf`. Version 1.0.0 of this repository is the version it cites, and the paper and that version are archived together on Zenodo at https://doi.org/10.5281/zenodo.23232696. `submission/` holds the filing notes for Zenodo and arXiv.
+
+To cite it:
+
+```bibtex
+@misc{gaur2026uno,
+  author        = {Pragyaan Gaur},
+  title         = {How long is a game of {Uno}? {A} counting law for large hands and the {Wild Draw Four} hoard},
+  year          = {2026},
+  eprint        = {2610.14076},
+  archivePrefix = {arXiv},
+  primaryClass  = {math.GM},
+  doi           = {10.5281/zenodo.23232696}
+}
+```
 
 ## Licence
 
