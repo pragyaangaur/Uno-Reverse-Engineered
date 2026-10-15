@@ -40,7 +40,7 @@ engine/endgame -n 3 -h 100000 -g 50      # the Draw Four endgame on its own
 
 ## Paper
 
-The paper is on arXiv as [arXiv:2610.14076](https://arxiv.org/abs/2610.14076). The source is `paper/uno.tex`, with a built copy in `paper/uno.pdf`. Version 1.0.0 of this repository is the version it cites, and the paper and that version are archived together on Zenodo at https://doi.org/10.5281/zenodo.23232696. `submission/` holds the filing notes for Zenodo and arXiv.
+The paper is on arXiv as [arXiv:2610.14076](https://arxiv.org/abs/2610.14076). Version 1.0.0 of this repository is the version it cites, and the paper and that version are archived together on Zenodo at https://doi.org/10.5281/zenodo.23232696.
 
 To cite it:
 

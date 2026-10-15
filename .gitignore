@@ -4,14 +4,12 @@ engine/endgame
 __pycache__/
 *.pyc
 .DS_Store
-paper/*.aux
-paper/*.log
-paper/*.out
-paper/*.fls
-paper/*.fdb_latexmk
-submission/zenodo/
-submission/arxiv/
 
 # Agent notes, kept local
 AGENTS.md
 HANDOFF.md
+
+# Paper, filing notes and personal notes, kept local
+paper/
+submission/
+EXPLAINER.md
