@@ -1,7 +1,7 @@
 # Uno Reverse Engineered
 
 [![arXiv](https://img.shields.io/badge/arXiv-2610.14076-b31b1b.svg)](https://arxiv.org/abs/2610.14076)
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.23232696.svg)](https://doi.org/10.5281/zenodo.23232696)
+[![DOI](https://img.shields.io/badge/DOI-10.5281%2Fzenodo.23232696-blue.svg)](https://doi.org/10.5281/zenodo.23232696)
 
 > Chess grandmaster and mathematician Karsten Müller read the paper and wrote in to ask whether its strategy equilibrium is essential in the sense of Wu and Jiang (1962).
 
